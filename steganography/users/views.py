@@ -1,11 +1,9 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.views import View
 
 from .forms import UserSignUpForm, UserLoginForm
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth import views as auth_views, authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout
 
 
 # Create your views here.
@@ -65,7 +63,6 @@ class LoginView(View):
             return redirect("welcome-page")
         else:
             return render(request, self.template_name, {'form': UserLoginForm()})
-
 
 
 class LogoutView(View):
