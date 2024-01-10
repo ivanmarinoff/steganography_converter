@@ -20,15 +20,14 @@ def steg_welcome(request):
 class StegAudioView(TemplateView):
     template_name = '../templates/audio_steg/audio_input.html'
 
-    def get(self, request):
+    def get_context_data(self, **kwargs):
         form = AudioForm()
-        return render(request, self.template_name, {'form': form})
+        return {'form': form}
 
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
         form = AudioForm(request.POST)
 
         if form.is_valid():
-            # form.save()
             Type = form.cleaned_data.get('stegtype')
             HiddenText = form.cleaned_data.get('hiddentext')
             choice_field = form.cleaned_data.get('choice_field')
@@ -43,6 +42,7 @@ class StegAudioView(TemplateView):
                 result1 = audio_decrypt(HiddenText)
                 result = {'notes': result1}
                 print(result1)
+
         args = {'form': form, 'result': result, 'choice': choice_field}
         return render(request, self.template_name, args)
 
@@ -50,15 +50,14 @@ class StegAudioView(TemplateView):
 class StegTextView(TemplateView):
     template_name = '../templates/audio_steg/text_input.html'
 
-    def get(self, request):
+    def get_context_data(self, **kwargs):
         form = TextForm()
-        return render(request, self.template_name, {'form': form})
+        return {'form': form}
 
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
         form = TextForm(request.POST)
 
         if form.is_valid():
-            # form.save()
             Type = form.cleaned_data.get('stegtype')
             PlainText = form.cleaned_data.get('plaintext')
             HiddenText = form.cleaned_data.get('hiddentext')
@@ -66,7 +65,6 @@ class StegTextView(TemplateView):
             result = 'Invalid Form Input. Try Again!'
             if choice_field == '1':
                 result = text_encrypt(PlainText, HiddenText)
-
             elif choice_field == '2':
                 result = text_decrypt(PlainText)
 
@@ -77,19 +75,21 @@ class StegTextView(TemplateView):
 class StegImageView(TemplateView):
     template_name = '../templates/audio_steg/image_input.html'
 
-    def get(self, request):
+    def get_context_data(self, **kwargs):
         form = ImageForm()
-        return render(request, self.template_name, {'form': form})
+        return {'form': form}
 
-    def post(self, request):
-        form = ImageForm(request.POST)
+    def post(self, request, *args, **kwargs):
+        form = ImageForm(request.POST, request.FILES)
+
+        result = None  # Initialize the result variable
 
         if form.is_valid():
-            # form.save()
             Type = form.cleaned_data.get('stegtype')
             PlainText = form.cleaned_data.get('plaintext')
             HiddenText = form.cleaned_data.get('hiddentext')
             result = text_encrypt(PlainText, HiddenText)
+
         args = {'form': form, 'result': result}
         return render(request, self.template_name, args)
 

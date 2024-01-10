@@ -6,7 +6,6 @@ from .forms import UserSignUpForm, UserLoginForm
 from django.contrib.auth import authenticate, login, logout
 
 
-# Create your views here.
 class RegisterView(View):
     template_name = "../templates/users/signup.html"
 
@@ -28,21 +27,6 @@ class RegisterView(View):
         else:
             form = UserSignUpForm()
         return render(request, '../templates/users/signup.html', {'form': form})
-
-
-# def signup(request):
-#     if request.method == 'POST':
-#         form = UserSignUpForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             # Print message
-#             UserName = form.cleaned_data.get('username')
-#             messages.success(request, f'{UserName}: Account Created!')
-#             return redirect('login')
-#         #else:
-#     else:
-#         form = UserSignUpForm()
-#     return render(request, '../templates/users/signup.html', {'form': form})
 
 
 class LoginView(View):
