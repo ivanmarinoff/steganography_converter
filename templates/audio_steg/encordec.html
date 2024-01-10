@@ -1,0 +1,15 @@
+{% extends "audio_steg/base.html" %}
+{% block content %}
+
+<div class="page-header">
+    <h1 class="roboto">Choose one: </h1>
+</div>
+<br><br>
+<form method="POST">
+        {% csrf_token %}
+{#        {% load crispy_forms_tags %}#}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Select</button>
+</form>
+
+{% endblock %}
