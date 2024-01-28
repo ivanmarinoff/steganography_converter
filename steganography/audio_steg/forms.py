@@ -43,9 +43,11 @@ class TextForm(forms.ModelForm):
     plaintext = forms.CharField(label='Plain Text')
     hiddentext = forms.CharField(label='Hidden Text', max_length=35, required=False)
 
+
     class Meta:
         model = Post
         fields = ['stegtype', 'choice_field', 'plaintext', 'hiddentext']
+
 
 class ImageForm(forms.ModelForm):
     stegtype = forms.CharField(max_length=10, widget=forms.HiddenInput(), initial='Text')

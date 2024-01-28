@@ -6,6 +6,27 @@ from django.contrib.auth.decorators import login_required
 from .text_encrypt import text_encrypt, text_decrypt
 from .audio_encrypt import audio_encrypt, music, audio_decrypt
 
+@login_required
+def history(request):
+    context = {
+        'posts': Post.objects.all()
+    }
+    return render(request, 'audio_steg/history.html', context)
+
+
+def about(request):
+    return render(request, 'audio_steg/about.html', {'title': 'About'})
+
+
+def encryptresult(request):
+    return render(request, 'audio_steg/encryptresult.html')
+
+
+class HistoryListView(ListView):
+    model = Post
+    template_name = 'audio_steg/history.html'
+    context_object_name = 'posts'
+    ordering = ['-date']
 
 # Views
 
@@ -49,6 +70,7 @@ class StegAudioView(TemplateView):
 
 class StegTextView(TemplateView):
     template_name = '../templates/audio_steg/text_input.html'
+    success_url = encryptresult
 
     def get_context_data(self, **kwargs):
         form = TextForm()
@@ -58,18 +80,24 @@ class StegTextView(TemplateView):
         form = TextForm(request.POST)
 
         if form.is_valid():
-            Type = form.cleaned_data.get('stegtype')
-            PlainText = form.cleaned_data.get('plaintext')
-            HiddenText = form.cleaned_data.get('hiddentext')
+            stegtype = form.cleaned_data.get('stegtype')
+            plaintext = form.cleaned_data.get('plaintext')
+            hiddentext = form.cleaned_data.get('hiddentext')
             choice_field = form.cleaned_data.get('choice_field')
             result = 'Invalid Form Input. Try Again!'
+
             if choice_field == '1':
-                result = text_encrypt(PlainText, HiddenText)
+                result = text_encrypt(plaintext, hiddentext)
             elif choice_field == '2':
-                result = text_decrypt(PlainText)
+                result = text_decrypt(plaintext)
+
+            # Update the form with the result (assuming you have a result field in your form)
+            form.instance.stegtext = result
 
         args = {'form': form, 'result': result}
+
         return render(request, self.template_name, args)
+
 
 
 class StegImageView(TemplateView):

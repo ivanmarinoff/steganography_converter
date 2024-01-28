@@ -21,7 +21,7 @@ class Post(models.Model):
     hiddentext = models.TextField(max_length=60)
     date = models.DateTimeField(default=timezone.now)
     stegtext = models.CharField(max_length=300)
-    stegimage = models.ImageField(default='default.jpeg', upload_to='steg_image')
+    stegimage = models.ImageField(upload_to='steg_image')
     author = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
