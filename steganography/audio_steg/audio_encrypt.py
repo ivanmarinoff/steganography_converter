@@ -33,6 +33,7 @@ def audio_encrypt(hiddentext):
 
 def music(hiddentext):
     # scal = scale(C4, MAJOR)
+    global i
     key_copy = audio_encrypt(hiddentext)
     key2 = []
     # dividing the octal values to individual notes
@@ -45,7 +46,6 @@ def music(hiddentext):
             key2.append(j)
             k = k // 10
             l += 1
-        print("hello" + str(i))
 
     # play the encrypted text into music(Sonic Pi running in the background)
     sonicpi_output = []

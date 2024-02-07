@@ -89,10 +89,12 @@ class StegTextView(TemplateView):
             if choice_field == '1':
                 result = text_encrypt(plaintext, hiddentext)
             elif choice_field == '2':
-                result = text_decrypt(plaintext)
+                # result = text_decrypt(plaintext)
+                result = text_decrypt(self.success_url)
 
             # Update the form with the result (assuming you have a result field in your form)
-            form.instance.stegtext = result
+            # form.instance.stegtype = result
+            result = form.instance.stegtype
 
         args = {'form': form, 'result': result}
 
@@ -120,26 +122,3 @@ class StegImageView(TemplateView):
 
         args = {'form': form, 'result': result}
         return render(request, self.template_name, args)
-
-
-@login_required
-def history(request):
-    context = {
-        'posts': Post.objects.all()
-    }
-    return render(request, 'audio_steg/history.html', context)
-
-
-def about(request):
-    return render(request, 'audio_steg/about.html', {'title': 'About'})
-
-
-def encryptresult(request):
-    return render(request, 'audio_steg/encryptresult.html')
-
-
-class HistoryListView(ListView):
-    model = Post
-    template_name = 'audio_steg/history.html'
-    context_object_name = 'posts'
-    ordering = ['-date']
